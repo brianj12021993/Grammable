@@ -52,10 +52,10 @@ RSpec.describe GramsController, type: :controller do
      	 	gram = FactoryBot.create(:gram, message: "Initial Value")
      	 	sign_in gram.user
 
-     	 	patch :update, params: { id: gram.id, gram: { message: 'Changed' } }
+     	 	patch :update, params: { id: gram.id, gram: { message: 'Initial Value' } }
      	 	expect(response).to redirect_to root_path
      	 	gram.reload
-  		 	expect(gram.message).to eq "Changed"
+  		 	expect(gram.message).to eq "Initial Value"
      	end
 
      	it "should have http 404 error if the gram cannot be found" do
@@ -152,6 +152,13 @@ RSpec.describe GramsController, type: :controller do
 	 	 it "should successfully create a new gram in our database" do
 	 	 	user = FactoryBot.create(:user)
       		sign_in user
+
+      		post :create, params: {
+    			gram: {
+      				message: 'Hello!',
+      				picture: fixture_file_upload("/picture.png", 'image/png')
+    			}
+  			}
 
 	 	 	post :create, params: { gram: { message: 'Hello!' } }
 	 	 	expect(response).to redirect_to root_path
